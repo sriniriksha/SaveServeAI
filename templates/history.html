@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>History - SaveServe AI</title>
+</head>
+
+<body style="font-family: Arial; background:#f4f4f4; margin:0;">
+
+    <!-- HEADER -->
+    <div style="text-align:center; padding:30px; background:#27ae60; color:white;">
+        <h1>📂 Prediction History</h1>
+    </div>
+
+    <!-- TABLE -->
+    <div style="width:90%; margin:auto; margin-top:30px;">
+
+        <table border="1" cellpadding="10" style="width:100%; border-collapse:collapse; background:white; text-align:center;">
+
+            <tr style="background:#2c3e50; color:white;">
+                <th>Time</th>
+                <th>Hotel</th>
+                <th>City</th>
+                <th>Categories (Prepared / Served / Waste)</th>
+                <th>Total Waste</th>
+                <th>Waste %</th>
+                <th>Priority</th>
+            </tr>
+
+            {% for item in history %}
+            <tr>
+
+                <!-- TIME -->
+                <td>{{ item.time }}</td>
+
+                <!-- HOTEL -->
+                <td>{{ item.hotel }}</td>
+
+                <!-- CITY -->
+                <td>{{ item.city }}</td>
+
+                <!-- CATEGORY BREAKDOWN -->
+                <td style="text-align:left;">
+                    {% for c in item.categories %}
+                        <b>{{ c.type }}</b> →
+                        P: {{ c.prepared }},
+                        S: {{ c.served }},
+                        W: {{ c.waste }}
+                        <br>
+                    {% endfor %}
+                </td>
+
+                <!-- TOTAL -->
+                <td>{{ item.waste }}</td>
+
+                <!-- % -->
+                <td>{{ item.percent }}%</td>
+
+                <!-- PRIORITY -->
+                <td>{{ item.priority }}</td>
+
+            </tr>
+            {% endfor %}
+
+        </table>
+
+        <br><br>
+
+        <!-- BACK BUTTON -->
+        <div style="text-align:center;">
+            <a href="/admin_form"
+               style="text-decoration:none; background:#3498db; color:white; padding:10px 20px; border-radius:8px;">
+               🔙 Back
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>

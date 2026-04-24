@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Input - SaveServe AI</title>
+</head>
+
+<body style="margin:0; font-family: Arial, sans-serif; background: linear-gradient(to right, #56ab2f, #a8e063);">
+
+    <!-- HEADER -->
+    <div style="text-align:center; padding: 40px; color:white;">
+        <h1>👤 Staff Mode</h1>
+        <p>Quick Food Waste Estimation</p>
+    </div>
+
+    <!-- FORM -->
+    <div style="background:white; width:350px; margin:auto; padding:30px; border-radius:15px; box-shadow:0px 10px 25px rgba(0,0,0,0.2); text-align:center;">
+
+        <form action="/predict_user" method="POST">
+
+            <!-- FOOD -->
+            <label>Food Prepared (plates)</label><br>
+            <input type="number" name="food" required min="0"
+                style="width:100%; padding:10px; margin-top:5px; border-radius:5px; border:1px solid #ccc;"><br><br>
+
+            <!-- PEOPLE -->
+            <label>People Served</label><br>
+            <input type="number" name="people" required min="0"
+                style="width:100%; padding:10px; margin-top:5px; border-radius:5px; border:1px solid #ccc;"><br><br>
+
+            <!-- BUTTON -->
+            <button type="submit"
+                style="width:100%; background:#27ae60; color:white; padding:12px; border:none; border-radius:8px; font-size:16px; cursor:pointer;">
+                Predict 🚀
+            </button>
+
+        </form>
+
+        <br>
+
+        <!-- BACK -->
+        <a href="/"
+           style="text-decoration:none; color:#3498db;">
+           ← Back to Home
+        </a>
+
+    </div>
+
+</body>
+</html>

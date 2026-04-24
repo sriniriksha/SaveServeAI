@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Result - SaveServe AI</title>
+</head>
+
+<body style="margin:0; font-family: Arial, sans-serif; background: linear-gradient(to right, #56ab2f, #a8e063);">
+
+    <!-- HEADER -->
+    <div style="text-align:center; padding: 40px; color:white;">
+        <h1>📊 Prediction Result</h1>
+
+        <!-- 🏨 HOTEL + CITY -->
+        <p>🏨 {{ hotel }}</p>
+        <p>📍 {{ city }}</p>
+    </div>
+
+    <!-- MAIN BOX -->
+    <div style="background:white; width:420px; margin:auto; padding:30px; border-radius:15px; box-shadow:0px 10px 25px rgba(0,0,0,0.2); text-align:center;">
+
+        <!-- TIME -->
+        <h3 style="color:black;">🕒 {{ time }}</h3>
+
+        <hr>
+
+        <!-- TOTAL -->
+        <h2 style="color:#27ae60;">Total Leftover: {{ total_leftover }} plates</h2>
+        <p>Average per day: <b>{{ avg_leftover }}</b> plates</p>
+
+        <hr>
+
+        <!-- 🍽 CATEGORY BREAKDOWN (NEW FEATURE) -->
+        <h3>🍽 Category Breakdown</h3>
+
+        {% for c in categories %}
+            <p>
+                <b>{{ c.type }}</b> → Prepared: {{ c.prepared }},
+                Served: {{ c.served }},
+                Waste: {{ c.waste }}
+            </p>
+        {% endfor %}
+
+        <hr>
+
+        <!-- WASTE -->
+        <p><b>Waste Percentage:</b> {{ waste_percent }}%</p>
+        <p><b>Waste Level:</b> {{ waste_level }}</p>
+
+        <hr>
+
+        <!-- CARBON -->
+        <p><b>Carbon Impact Saved:</b> {{ carbon_saved }} kg CO₂ 🌱</p>
+
+        <hr>
+
+        <!-- PRIORITY -->
+        <p><b>Donation Priority:</b> {{ priority }}</p>
+
+        <hr>
+
+        <!-- DAILY -->
+        {% if daily_data %}
+        <p><b>📅 Multi-Day Simulation:</b></p>
+
+        {% for day, waste in daily_data %}
+            <p>Day {{ day }} → {{ waste }} plates</p>
+        {% endfor %}
+        <hr>
+        {% endif %}
+
+        <!-- 🌍 MAP -->
+        {% if total_leftover > 0 %}
+        <p>Find nearby NGOs 📍</p>
+
+        <iframe
+            src="https://www.google.com/maps?q=food+donation+near+{{ hotel }}+{{ city }}&output=embed"
+            width="100%"
+            height="250"
+            style="border:0; border-radius:10px;">
+        </iframe>
+        {% endif %}
+
+        <br><br>
+
+        <!-- DOWNLOAD -->
+        <a href="/download_report"
+           style="background:#8e44ad; color:white; padding:10px; border-radius:8px; text-decoration:none;">
+           📥 Download Report
+        </a>
+
+        <br><br>
+
+        <!-- BACK -->
+        <a href="/admin_form"
+           style="background:#3498db; color:white; padding:10px; border-radius:8px; text-decoration:none;">
+           🔙 Go Back
+        </a>
+
+    </div>
+
+</body>
+</html>

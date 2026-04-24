@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Result - SaveServe AI</title>
+</head>
+
+<body style="margin:0; font-family: Arial, sans-serif; background: linear-gradient(to right, #56ab2f, #a8e063);">
+
+    <!-- HEADER -->
+    <div style="text-align:center; padding: 40px; color:white;">
+        <h1>👤 Staff Result</h1>
+    </div>
+
+    <!-- RESULT BOX -->
+    <div style="background:white; width:350px; margin:auto; padding:30px; border-radius:15px; box-shadow:0px 10px 25px rgba(0,0,0,0.2); text-align:center;">
+
+        <h2 style="color:#27ae60;">{{ leftover }} plates leftover</h2>
+
+        <hr>
+
+        {% if leftover > 0 %}
+            <p style="color:green;">🍽️ Surplus food available. Inform manager or donate.</p>
+        {% else %}
+            <p style="color:red;">👏 Perfect planning! No food waste.</p>
+        {% endif %}
+
+        <br>
+
+        <!-- BACK -->
+        <a href="/user"
+           style="text-decoration:none; background:#3498db; color:white; padding:10px 15px; border-radius:8px;">
+           🔙 Try Again
+        </a>
+
+    </div>
+
+</body>
+</html>
