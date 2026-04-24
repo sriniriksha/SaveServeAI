@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SaveServe AI</title>
+</head>
+
+<body style="margin:0; font-family: Arial, sans-serif; background: linear-gradient(to right, #56ab2f, #a8e063);">
+
+    <!-- HEADER -->
+    <div style="text-align:center; padding: 50px; color:white;">
+        <h1 style="font-size:40px;">🍽️ SaveServe AI</h1>
+        <p>Smart Food Waste Prediction & Redistribution</p>
+
+        <!-- 🏨 HOTEL NAME -->
+        <p style="font-size:18px; margin-top:10px;">
+            🏨 <b>{{ hotel }}</b>
+        </p>
+
+        <!-- 📍 CITY (NEW) -->
+        <p style="font-size:16px;">
+            📍 {{ city }}
+        </p>
+    </div>
+
+    <!-- OPTIONS -->
+    <div style="background:white; width:350px; margin:auto; padding:30px; border-radius:15px; box-shadow:0px 10px 25px rgba(0,0,0,0.2); text-align:center;">
+
+        <h3>Select Mode</h3>
+
+        <br>
+
+        <!-- ADMIN -->
+        <a href="/login"
+           style="display:block; margin:10px; padding:12px; background:#2c3e50; color:white; border-radius:8px; text-decoration:none; font-size:16px;">
+           🔐 Login as Admin
+        </a>
+
+        <!-- STAFF -->
+        <a href="/user"
+           style="display:block; margin:10px; padding:12px; background:#27ae60; color:white; border-radius:8px; text-decoration:none; font-size:16px;">
+           👤 Continue as Staff
+        </a>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div style="text-align:center; margin-top:30px; color:white;">
+        Helping reduce food waste using AI 🌍
+    </div>
+
+</body>
+</html>

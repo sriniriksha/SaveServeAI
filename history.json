@@ -1,0 +1,86 @@
+[
+    {
+        "time": "23-04-2026 20:32",
+        "hotel": "sri hotels ",
+        "city": "coimabtore",
+        "categories": [
+            {
+                "type": "seafood",
+                "prepared": 500,
+                "served": 200,
+                "waste": 302
+            },
+            {
+                "type": "bakery",
+                "prepared": 900,
+                "served": 750,
+                "waste": 268
+            },
+            {
+                "type": "meal",
+                "prepared": 600,
+                "served": 400,
+                "waste": 166
+            }
+        ],
+        "waste": 736,
+        "percent": 36.8,
+        "priority": "Urgent \ud83d\udea8"
+    },
+    {
+        "time": "23-04-2026 20:34",
+        "hotel": "sri hotels ",
+        "city": "coimabtore",
+        "categories": [
+            {
+                "type": "seafood",
+                "prepared": 500,
+                "served": 200,
+                "waste": 324
+            },
+            {
+                "type": "pasta",
+                "prepared": 60,
+                "served": 55,
+                "waste": 10
+            },
+            {
+                "type": "bakery",
+                "prepared": 900,
+                "served": 750,
+                "waste": 297
+            }
+        ],
+        "waste": 631,
+        "percent": 43.22,
+        "priority": "Urgent \ud83d\udea8"
+    },
+    {
+        "time": "23-04-2026 20:41",
+        "hotel": "sri hotels ",
+        "city": "coimabtore",
+        "categories": [
+            {
+                "type": "seafood",
+                "prepared": 500,
+                "served": 200,
+                "waste": 11
+            },
+            {
+                "type": "frozen",
+                "prepared": 300,
+                "served": 120,
+                "waste": 77
+            },
+            {
+                "type": "meal",
+                "prepared": 1000,
+                "served": 950,
+                "waste": 0
+            }
+        ],
+        "waste": 88,
+        "percent": 4.89,
+        "priority": "High"
+    }
+]
