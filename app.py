@@ -16,11 +16,11 @@ app.secret_key = "secret123"
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "1234"
 
-# 📂 File for persistence
+# 📂 File
 DATA_FILE = "history.json"
 
 
-# 🔄 LOAD HISTORY FROM FILE
+# 🔄 LOAD HISTORY
 def load_history():
     if os.path.exists(DATA_FILE):
         try:
@@ -40,13 +40,13 @@ def save_history(data):
 history = load_history()
 
 
-# 🏨 START PAGE
+# 🏨 START
 @app.route('/')
 def start():
     return render_template('hotel.html')
 
 
-# 🏨 SAVE HOTEL + CITY
+# 🏨 SET HOTEL
 @app.route('/set_hotel', methods=['POST'])
 def set_hotel():
     session['hotel'] = request.form['hotel']
@@ -95,7 +95,7 @@ def admin_form():
     )
 
 
-# 👤 STAFF PAGE
+# 👤 USER PAGE
 @app.route('/user')
 def user():
     return render_template(
@@ -105,7 +105,7 @@ def user():
     )
 
 
-# 👤 STAFF PREDICTION
+# 👤 USER PREDICTION (SIMPLE DAILY)
 @app.route('/predict_user', methods=['POST'])
 def predict_user():
     try:
@@ -124,14 +124,12 @@ def predict_user():
         return "Error in input"
 
 
-# 👨‍💼 ADMIN PREDICTION (FIXED)
+# 👨‍💼 ADMIN PREDICTION (DAILY MODEL)
 @app.route('/predict', methods=['POST'])
 def predict():
     global history
 
     try:
-        days = int(request.form['days'])
-
         total_leftover = 0
         total_prepared = 0
         categories = []
@@ -148,7 +146,7 @@ def predict():
             "vegan": 0.8
         }
 
-        # 🔁 LOOP
+        # 🔁 LOOP (DAILY ONLY)
         for i in range(1, 7):
             food = request.form.get(f'food{i}')
             people = request.form.get(f'people{i}')
@@ -161,29 +159,27 @@ def predict():
                 avg = avg_map.get(food_type, 1)
                 fluctuation = random.uniform(0.9, 1.1)
 
-                # ✅ FIXED LOGIC
-                daily_consumed = people * avg * fluctuation
-                total_consumed = daily_consumed * days
-                total_food = food * days
-
-                cat_waste = max(0, int(total_food - total_consumed))
+                # ✅ DAILY LOGIC
+                consumed = people * avg * fluctuation
+                cat_waste = max(0, int(food - consumed))
 
                 total_leftover += cat_waste
-                total_prepared += total_food
+                total_prepared += food
 
                 categories.append({
                     "type": food_type,
-                    "prepared": total_food,
-                    "served": int(total_consumed),
+                    "prepared": food,
+                    "served": int(consumed),
                     "waste": cat_waste
                 })
 
-        avg_leftover = int(total_leftover / days) if days > 0 else 0
+        avg_leftover = total_leftover  # since daily
 
         waste_percent = round((total_leftover / total_prepared) * 100, 2) if total_prepared > 0 else 0
 
         carbon_saved = round(total_leftover * 0.5, 2)
 
+        # 🎯 PRIORITY
         if total_leftover > 100:
             priority = "Urgent 🚨"
         elif total_leftover > 50:
@@ -245,7 +241,7 @@ def download_report():
     styles = getSampleStyleSheet()
 
     elements = []
-    elements.append(Paragraph("SaveServe AI - Full History Report", styles['Title']))
+    elements.append(Paragraph("SaveServe AI - Daily Report", styles['Title']))
     elements.append(Spacer(1, 20))
 
     if not history:
