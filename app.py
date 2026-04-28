@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, send_file
 from datetime import datetime
 import random
 import json
 import os
+import io
 
 # PDF
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
@@ -22,12 +23,15 @@ DATA_FILE = "history.json"
 # 🔄 LOAD HISTORY FROM FILE
 def load_history():
     if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, "r") as f:
-            return json.load(f)
+        try:
+            with open(DATA_FILE, "r") as f:
+                return json.load(f)
+        except:
+            return []
     return []
 
 
-# 💾 SAVE HISTORY TO FILE
+# 💾 SAVE HISTORY
 def save_history(data):
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=4)
@@ -36,7 +40,7 @@ def save_history(data):
 history = load_history()
 
 
-# 🏨 FIRST PAGE
+# 🏨 START PAGE
 @app.route('/')
 def start():
     return render_template('hotel.html')
@@ -120,7 +124,7 @@ def predict_user():
         return "Error in input"
 
 
-# 👨‍💼 ADMIN PREDICTION (FINAL FIXED LOGIC)
+# 👨‍💼 ADMIN PREDICTION (FIXED)
 @app.route('/predict', methods=['POST'])
 def predict():
     global history
@@ -144,7 +148,7 @@ def predict():
             "vegan": 0.8
         }
 
-        # 🔁 MULTI CATEGORY LOOP
+        # 🔁 LOOP
         for i in range(1, 7):
             food = request.form.get(f'food{i}')
             people = request.form.get(f'people{i}')
@@ -154,32 +158,32 @@ def predict():
                 food = int(food)
                 people = int(people)
 
-                total_prepared += food
                 avg = avg_map.get(food_type, 1)
-
-                # ✅ FIXED TOTAL CONSUMPTION
                 fluctuation = random.uniform(0.9, 1.1)
-                total_consumed = people * avg * days * fluctuation
 
-                cat_waste = max(0, int(food - total_consumed))
+                # ✅ FIXED LOGIC
+                daily_consumed = people * avg * fluctuation
+                total_consumed = daily_consumed * days
+                total_food = food * days
+
+                cat_waste = max(0, int(total_food - total_consumed))
+
                 total_leftover += cat_waste
+                total_prepared += total_food
 
                 categories.append({
                     "type": food_type,
-                    "prepared": food,
-                    "served": people,
+                    "prepared": total_food,
+                    "served": int(total_consumed),
                     "waste": cat_waste
                 })
 
         avg_leftover = int(total_leftover / days) if days > 0 else 0
 
-        # ✅ CORRECT WASTE %
         waste_percent = round((total_leftover / total_prepared) * 100, 2) if total_prepared > 0 else 0
 
-        # 🌱 CARBON
         carbon_saved = round(total_leftover * 0.5, 2)
 
-        # 🎯 PRIORITY
         if total_leftover > 100:
             priority = "Urgent 🚨"
         elif total_leftover > 50:
@@ -191,7 +195,6 @@ def predict():
 
         current_time = datetime.now().strftime("%d-%m-%Y %H:%M")
 
-        # 📂 SAVE HISTORY
         new_entry = {
             "time": current_time,
             "hotel": session.get('hotel'),
@@ -203,7 +206,7 @@ def predict():
         }
 
         history.append(new_entry)
-        save_history(history)  # 💾 persist
+        save_history(history)
 
         return render_template(
             'result.html',
@@ -223,7 +226,7 @@ def predict():
         return str(e)
 
 
-# 📂 HISTORY PAGE
+# 📂 HISTORY
 @app.route('/history')
 def view_history():
     if not session.get('admin'):
@@ -231,17 +234,17 @@ def view_history():
     return render_template('history.html', history=history)
 
 
-# 📥 DOWNLOAD FULL PDF
+# 📥 PDF
 @app.route('/download_report')
 def download_report():
     if not session.get('admin'):
         return redirect('/login')
 
-    doc = SimpleDocTemplate("report.pdf")
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer)
     styles = getSampleStyleSheet()
 
     elements = []
-
     elements.append(Paragraph("SaveServe AI - Full History Report", styles['Title']))
     elements.append(Spacer(1, 20))
 
@@ -249,7 +252,6 @@ def download_report():
         elements.append(Paragraph("No data available.", styles['Normal']))
     else:
         for idx, entry in enumerate(history, start=1):
-
             elements.append(Paragraph(f"Record {idx}", styles['Heading2']))
             elements.append(Spacer(1, 10))
 
@@ -260,7 +262,6 @@ def download_report():
             elements.append(Paragraph(f"Waste Percentage: {entry.get('percent', 0)}%", styles['Normal']))
             elements.append(Paragraph(f"Priority: {entry.get('priority', '')}", styles['Normal']))
 
-            # 🔥 CATEGORY BREAKDOWN
             if 'categories' in entry:
                 elements.append(Spacer(1, 10))
                 elements.append(Paragraph("Category Breakdown:", styles['Heading3']))
@@ -275,9 +276,11 @@ def download_report():
             elements.append(Spacer(1, 20))
 
     doc.build(elements)
+    buffer.seek(0)
 
-    return "Full report downloaded! Check your project folder 📂"
+    return send_file(buffer, as_attachment=True, download_name="report.pdf", mimetype='application/pdf')
 
 
+# 🚀 RUN
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=10000)
