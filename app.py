@@ -180,14 +180,16 @@ def predict():
         carbon_saved = round(total_leftover * 0.5, 2)
 
         # 🎯 PRIORITY
-        if total_leftover > 100:
+        if waste_percent > 50 or total_leftover > 500:
             priority = "Urgent 🚨"
-        elif total_leftover > 50:
+        elif waste_percent > 30 or total_leftover > 200:
             priority = "High"
-        elif total_leftover > 20:
+        elif waste_percent > 15:
             priority = "Medium"
         else:
             priority = "Low"
+        
+        
 
         current_time = datetime.now().strftime("%d-%m-%Y %H:%M")
 
